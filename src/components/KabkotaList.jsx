@@ -27,6 +27,7 @@ const KabkotaList = () => {
                     const parameters = area.getElementsByTagName('parameter');
                     let weatherCode = null;
                     let temperature = null;
+                    let windDirection = null;
 
                     // Extract weather code and temperature data
                     for (let param of parameters) {
@@ -36,6 +37,9 @@ const KabkotaList = () => {
                         } else if (id === 't') {
                             temperature = param.getElementsByTagName('value')[0].textContent;
                         }
+                        else if (id === 'wd') {
+                            windDirection = param.getElementsByTagName('value')[1].textContent;
+                        }
                     }
 
                     const weather = weatherConditions[weatherCode] || 'Tidak diketahui';
@@ -44,7 +48,11 @@ const KabkotaList = () => {
                         id: area.getAttribute('id'),
                         name: area.getElementsByTagName('name')[0].textContent,
                         weather,
-                        temperature
+                        temperature,
+                        latitude: parseFloat(area.getAttribute('latitude')),
+                        longitude: parseFloat(area.getAttribute('longitude')),
+                        windDirection,
+                        
                     };
                 });
 
@@ -80,7 +88,7 @@ const KabkotaList = () => {
                     </div>
                 ))}
             </div>
-            <WeatherMap />
+            <WeatherMap locations={forecast} />
         </div>
     );
 };
